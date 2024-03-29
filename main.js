@@ -1,31 +1,15 @@
 const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
+let radius = canvas.height / 2;
+ctx.translate(radius, radius);
+radius = radius * 0.90
+setInterval(tempusFugit, 1000);
+
 
 const deg2rad = (deg) => deg * Math.PI / 180;
 
 //////////////////////////////////////////////////////////////////////////////
-
-ctx.beginPath();
-ctx.arc(100, 300, 50, 0, deg2rad(180));
-ctx.fillStyle = 'lightblue';
-ctx.fill();
-
-ctx.closePath();
-
-///////////////////////////////////////////////////////////////////////////
-
-ctx.beginPath();
-ctx.strokeStyle = 'lightcoral';
-ctx.moveTo(400, 150);
-ctx.lineTo(500, 150);
-ctx.lineTo(600, 150);
-ctx.lineTo(600, 200);
-ctx.stroke();
-
-ctx.closePath();
-
-////////////////////////////////////////////////////////////////////////////
 
 function chiffre(nb, position, angle){
 
@@ -194,18 +178,27 @@ function chiffre(nb, position, angle){
 function drawTime(ctx, radius){
     const now = new Date();
     let hour = now.getHours();
-    console.log(hour)
+    let minute = now.getMinutes();
+    let second = now.getSeconds();
     //hour
     hour=hour%12;
     hour=(hour*Math.PI/6)+
+    (minute*Math.PI/(6*60))+
+    (second*Math.PI/(360*60));
     drawHand(ctx, hour, radius*0.5, radius*0.07);
+    //minute
+    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+    drawHand(ctx, minute, radius*0.8, radius*0.07);
+    // second
+    second=(second*Math.PI/30);
+    drawHand(ctx, second, radius*0.9, radius*0.02);
 }
 
 function drawHand(ctx, pos, length, width) {
     ctx.beginPath();
     ctx.lineWidth = 3;
     ctx.lineCap = "round";
-    ctx.moveTo(400,400);
+    ctx.moveTo(0,0);
     ctx.rotate(-pos);
     ctx.lineTo(0, -length);
     ctx.stroke();
@@ -214,56 +207,57 @@ function drawHand(ctx, pos, length, width) {
 
 ///-------------------------------------------------------------
 
-const nGraduation_ = 13
-ctx.strokeStyle = 'grey';
-test=0
-long=300
 
-for(let i=0; i<nGraduation_; i++){
-//    console.log(i)
-    const angle_ = deg2rad(180) * i / nGraduation_ +test
-    test=angle_/nGraduation_
-//    console.log(angle_)
+
+function tempusFugit(){
+
+    const nGraduation_ = 13
+    ctx.strokeStyle = 'grey';
+    test=0
+    long=300
+
+    ctx.fillStyle = 'aliceblue';
+    ctx.beginPath();
+    ctx.rect(-400, -400, 800, 800);
+    ctx.fill();
+    ctx.closePath();
+
+    ///-----------------------------------------------------------
+
+    for(let i=0; i<nGraduation_; i++){
+        //    console.log(i)
+            const angle_ = deg2rad(180) * i / nGraduation_ +test
+            test=angle_/nGraduation_
+        //    console.log(angle_)
+            ctx.save()
+            ctx.beginPath()
+            ctx.translate(0, 0)
+            ctx.rotate(angle_)
+            ctx.moveTo(25, 0)
+            ctx.lineTo(long, 0)
+            ctx.stroke()
+        
+            ctx.closePath()
+        
+            ctx.beginPath()
+            chiffre(i+1, long, angle_)
+            ctx.closePath()
+        
+            ctx.restore()
+    }
+    
+    ///------------------------------------------------------------
+    
+    ctx.beginPath();
+    ctx.arc(0, 0, 5, 0, deg2rad(360));
+    ctx.fillStyle = 'black';
+    ctx.fill();
+    
+    ctx.closePath();
+    
+    ///-----------------------------------------------------------
+    
     ctx.save()
-    ctx.beginPath()
-    ctx.translate(400, 400)
-    ctx.rotate(angle_)
-    ctx.moveTo(25, 0)
-    ctx.lineTo(long, 0)
-    ctx.stroke()
-
-    ctx.closePath()
-
-    ctx.beginPath()
-    chiffre(i+1, long, angle_)
-    ctx.closePath()
-
+    drawTime(ctx, radius);
     ctx.restore()
 }
-
-///------------------------------------------------------------
-
-ctx.beginPath();
-ctx.arc(400, 400, 5, 0, deg2rad(360));
-ctx.fillStyle = 'black';
-ctx.fill();
-
-ctx.closePath();
-
-///-----------------------------------------------------------
-
-const radius = 30
-ctx.save()
-drawTime(ctx, radius);
-ctx.restore()
-
-///////////////////////////////////////////////////////////////////////////
-
-ctx.fillStyle = 'red';
-ctx.strokeStyle = 'greenyellow';
-ctx.beginPath();
-ctx.rect(300, 200, 100, 100);
-ctx.fill();
-ctx.stroke();
-
-ctx.closePath();
