@@ -2,10 +2,9 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 
 
+const deg2rad = (deg) => deg * Math.PI / 180;
 
 //////////////////////////////////////////////////////////////////////////////
-
-const deg2rad = (deg) => deg * Math.PI / 180;
 
 ctx.beginPath();
 ctx.arc(100, 300, 50, 0, deg2rad(180));
@@ -106,16 +105,13 @@ function chiffre(nb, position, angle){
 
     }else if(nb==8){                          // 8
         ctx.strokeStyle = 'lightcoral';
-        ctx.moveTo(position+50, 0);
-        ctx.lineTo(position+70, -20);
-        ctx.moveTo(position+70, 0);
-        ctx.lineTo(position+50, -20);
+        ctx.moveTo(position+40, 0);
+        ctx.lineTo(position+60, -20);
+        ctx.moveTo(position+60, 0);
+        ctx.lineTo(position+40, -20);
 
         ctx.moveTo(position+30, 0);
         ctx.lineTo(position+30, -20);
-
-        ctx.moveTo(position+40, 0);
-        ctx.lineTo(position+40, -20);
 
         ctx.stroke();
         
@@ -195,7 +191,28 @@ function chiffre(nb, position, angle){
     // ctx.restore()
 }
 
-///------------------------
+function drawTime(ctx, radius){
+    const now = new Date();
+    let hour = now.getHours();
+    console.log(hour)
+    //hour
+    hour=hour%12;
+    hour=(hour*Math.PI/6)+
+    drawHand(ctx, hour, radius*0.5, radius*0.07);
+}
+
+function drawHand(ctx, pos, length, width) {
+    ctx.beginPath();
+    ctx.lineWidth = 3;
+    ctx.lineCap = "round";
+    ctx.moveTo(400,400);
+    ctx.rotate(-pos);
+    ctx.lineTo(0, -length);
+    ctx.stroke();
+    ctx.rotate(pos);
+}
+
+///-------------------------------------------------------------
 
 const nGraduation_ = 13
 ctx.strokeStyle = 'grey';
@@ -206,7 +223,7 @@ for(let i=0; i<nGraduation_; i++){
 //    console.log(i)
     const angle_ = deg2rad(180) * i / nGraduation_ +test
     test=angle_/nGraduation_
-    console.log(angle_)
+//    console.log(angle_)
     ctx.save()
     ctx.beginPath()
     ctx.translate(400, 400)
@@ -215,21 +232,30 @@ for(let i=0; i<nGraduation_; i++){
     ctx.lineTo(long, 0)
     ctx.stroke()
 
-
-
     ctx.closePath()
-
 
     ctx.beginPath()
     chiffre(i+1, long, angle_)
     ctx.closePath()
 
-
     ctx.restore()
-
-
-
 }
+
+///------------------------------------------------------------
+
+ctx.beginPath();
+ctx.arc(400, 400, 5, 0, deg2rad(360));
+ctx.fillStyle = 'black';
+ctx.fill();
+
+ctx.closePath();
+
+///-----------------------------------------------------------
+
+const radius = 30
+ctx.save()
+drawTime(ctx, radius);
+ctx.restore()
 
 ///////////////////////////////////////////////////////////////////////////
 
