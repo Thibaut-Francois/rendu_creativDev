@@ -187,11 +187,11 @@ function drawTime(ctx, radius){
     (second*Math.PI/(360*60));
     drawHand(ctx, hour, radius*0.5, radius*0.07);
     //minute
-    minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
-    drawHand(ctx, minute, radius*0.8, radius*0.07);
+    //minute=(minute*Math.PI/30)+(second*Math.PI/(30*60));
+    //drawHand(ctx, minute, radius*0.8, radius*0.07);
     // second
-    second=(second*Math.PI/30);
-    drawHand(ctx, second, radius*0.9, radius*0.02);
+    //second=(second*Math.PI/30);
+    //drawHand(ctx, second, radius*0.9, radius*0.02);
 }
 
 function drawHand(ctx, pos, length, width) {
@@ -248,16 +248,16 @@ function tempusFugit(){
     
     ///------------------------------------------------------------
     
+    ctx.save()
+    drawTime(ctx, radius);
+    ctx.restore()
+    
+    ///-----------------------------------------------------------
+    
     ctx.beginPath();
     ctx.arc(0, 0, 5, 0, deg2rad(360));
     ctx.fillStyle = 'black';
     ctx.fill();
     
     ctx.closePath();
-    
-    ///-----------------------------------------------------------
-    
-    ctx.save()
-    drawTime(ctx, radius);
-    ctx.restore()
 }
