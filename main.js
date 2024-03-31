@@ -6,14 +6,12 @@ ctx.translate(radius, radius);
 radius = radius * 0.90
 setInterval(tempusFugit, 1000);
 
-let ciel = ''
-
-
+let isDay = true
 const deg2rad = (deg) => deg * Math.PI / 180;
 
 //////////////////////////////////////////////////////////////////////////////
 
-function chiffre(nb, position, angle){
+function romanNumb(nb, position, angle){
 
     if(nb==1){                          // 1
         ctx.strokeStyle = 'lightcoral';
@@ -167,93 +165,55 @@ function chiffre(nb, position, angle){
         
     }
 
-    // ctx.save()
-    // ctx.beginPath();
-    // ctx.arc(position + 30, 0, 10, 0, deg2rad(360));
-    // ctx.fillStyle = 'lightblue';
-    // ctx.fill();
-
-    // ctx.closePath();
-    // ctx.restore()
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-/*
-function timeToAngle(time){
-    return (time*Math.PI/60+(Math.PI/2))%(Math.PI)+(Math.PI/2)
-}
-
-*/
-function timeToAngleHours(time){
-    return ((time*Math.PI/24)+(Math.PI/4))%(Math.PI)+(Math.PI/2)
-}
-
-function drawTime(ctx, radius){
+function getCoord(ctx, radius){
     const now = new Date();
     let hour = now.getHours();
     let minute = now.getMinutes();
     let second = now.getSeconds();
-    //hour
-    //drawHand(ctx, timeToAngleHours(hour), radius*0.5, radius*0.07);
-    //minute
-    //drawHand(ctx, timeToAngle(minute), radius*0.8, radius*0.07);
-    // second
-    //drawHand(ctx, timeToAngle(second), radius*0.9, radius*0.02);
-}
 
-function drawHand(ctx, pos, length) {
-    ctx.beginPath();
-    ctx.lineWidth = 4;
-    ctx.lineCap = "round";
-    ctx.moveTo(0,0);
-    ctx.rotate(-pos);
-    ctx.lineTo(0, -length);
-    ctx.stroke();
-    ctx.rotate(pos);
-}
+    let x, y
 
-//////////////////////////////////////////////////////////////////////////////
+    let time = hour + minute/60 + second/3600;
+    let angle = 3*Math.PI/2 - (time*Math.PI)/12
+    //console.log(angle)
 
-function GetCoord(ctx, radius){
-    const now = new Date();
-    let hour = now.getHours();
-    let minute = now.getMinutes();
-    let second = now.getSeconds();
+    x = (radius-100) * Math.cos(angle)
+    y = (radius-100) * Math.sin(angle)
+    //console.log(x, y)
 
     if(hour < 18 && hour >= 6){
-        let time = hour + minute/60 + second/3600;
 
-        let angle = 3*Math.PI/2 - (time*Math.PI)/12
+        isDay = true 
 
-        //console.log(angle)
-
-        let x = (radius-100) * Math.cos(angle)
-        let y = (radius-100) * Math.sin(angle)
-
-        console.log(x, y)
-
-        ctx.beginPath();    
-        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.lineWidth = 8;
         ctx.lineCap = "round";
         ctx.moveTo(0,0);
-        //ctx.rotate(-timeToAngleHours(hour));
         ctx.lineTo(x, y);
+        ctx.strokeStyle = '#3d3d3d';
         ctx.stroke();
-        //ctx.rotate(timeToAngleHours(hour));
     }else{
-
+        isDay = false
     }
 
-    
+    if(isDay){
+        ctx.fillStyle = 'yellow';
+        x=-x
+        y=-y
+    }else{
+        ctx.fillStyle = 'white';
+    }
+    ctx.beginPath();
+    ctx.arc(x, y, 30, 0, deg2rad(360))
+    ctx.fill();
+    ctx.closePath();
 }
-//////////////////////////////////////////////////////////////////////////////
-
-
 
 ///-------------------------------------------------------------
-
-
 
 function tempusFugit(){
 
@@ -262,7 +222,11 @@ function tempusFugit(){
     test=0
     long=300
 
-    ctx.fillStyle = 'aliceblue';
+    if(isDay){
+        ctx.fillStyle = '#f5eacb';
+    }else{
+        ctx.fillStyle = '#151459';
+    }
     ctx.beginPath();
     ctx.rect(-400, -400, 800, 800);
     ctx.fill();
@@ -287,7 +251,7 @@ function tempusFugit(){
             ctx.closePath()
         
             ctx.beginPath()
-            chiffre(i+1, long, angle_)
+            romanNumb(i+1, long, angle_)
             ctx.closePath()
         
             ctx.restore()
@@ -296,16 +260,15 @@ function tempusFugit(){
     ///------------------------------------------------------------
     
     ctx.save()
-    //drawTime(ctx, radius);
-    GetCoord(ctx, radius)
+    getCoord(ctx, radius)
     ctx.restore()
     
     ///-----------------------------------------------------------
     
     ctx.beginPath();
-    ctx.arc(0, 0, 5, 0, deg2rad(360));
+    ctx.arc(0, 0, 8, 0, deg2rad(360));
     ctx.fillStyle = 'black';
     ctx.fill();
-    
+
     ctx.closePath();
 }
