@@ -5,11 +5,11 @@ let radius = canvas.height / 2;
 ctx.translate(radius, radius);
 radius = radius * 0.90
 setInterval(tempusFugit, 1000);
+// JE REPLACE LE 0,0 AU CENTRE DU CANVAS
 
 let isDay = true
 const deg2rad = (deg) => deg * Math.PI / 180;
 
-//////////////////////////////////////////////////////////////////////////////
 
 function romanNumb(nb, position, angle){
 
@@ -166,8 +166,8 @@ function romanNumb(nb, position, angle){
     }
 
 }
+// CETTE FONCTION DESSINE TOUS LES CHIFFRES ROMAINS SUR LE CADRAN
 
-//////////////////////////////////////////////////////////////////////////////
 
 function getCoord(ctx, radius){
     const now = new Date();
@@ -175,15 +175,16 @@ function getCoord(ctx, radius){
     let minute = now.getMinutes();
     let second = now.getSeconds();
 
+    //hour = 14
+    // SI VOUS VOULEZ CHANGER L'HEURE, DECOMMENTEZ CETTE LIGNE ET MODIFIEZ L'HEURE
+
     let x, y
 
     let time = hour + minute/60 + second/3600;
     let angle = 3*Math.PI/2 - (time*Math.PI)/12
-    //console.log(angle)
 
     x = (radius-100) * Math.cos(angle)
     y = (radius-100) * Math.sin(angle)
-    //console.log(x, y)
 
     if(hour < 18 && hour >= 6){
 
@@ -211,11 +212,11 @@ function getCoord(ctx, radius){
     ctx.arc(x, y, 30, 0, deg2rad(360))
     ctx.fill();
     ctx.closePath();
+    // LA LUNE ET LE SOLEIL SONT DESSINES PAR OPOSITION A L'OMBRE DES HEURES
 }
 
-///-------------------------------------------------------------
-
 function tempusFugit(){
+// CETTE FONCTION DESSINE LE CADRAN ET APPELLE LES AUTRES FONCTIONS
 
     const nGraduation_ = 13
     ctx.strokeStyle = 'grey';
@@ -232,13 +233,10 @@ function tempusFugit(){
     ctx.fill();
     ctx.closePath();
 
-    ///-----------------------------------------------------------
-
     for(let i=0; i<nGraduation_; i++){
-        //    console.log(i)
             const angle_ = deg2rad(180) * i / nGraduation_ +test
             test=angle_/nGraduation_
-        //    console.log(angle_)
+
             ctx.save()
             ctx.beginPath()
             ctx.translate(0, 0)
@@ -247,7 +245,6 @@ function tempusFugit(){
             ctx.lineTo(long, 0)
             ctx.lineWidth = 2;
             ctx.stroke()
-        
             ctx.closePath()
         
             ctx.beginPath()
@@ -257,18 +254,15 @@ function tempusFugit(){
             ctx.restore()
     }
     
-    ///------------------------------------------------------------
-    
     ctx.save()
     getCoord(ctx, radius)
     ctx.restore()
-    
-    ///-----------------------------------------------------------
+    // ON DESSINE ICI L'OMBRE ET L'ASTRE
     
     ctx.beginPath();
     ctx.arc(0, 0, 8, 0, deg2rad(360));
     ctx.fillStyle = 'black';
     ctx.fill();
-
     ctx.closePath();
+    // ON DESSINE LE CENTRE DU CADRAN
 }
